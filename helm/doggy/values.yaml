@@ -1,0 +1,77 @@
+global:
+  imageRegistry: your-registry
+  imageTag: "0.1.0"
+  environment: production
+
+gateway:
+  enabled: true
+  replicas: 3
+  image:
+    repository: doggy-gateway
+    tag: "0.1.0"
+  resources:
+    requests: { cpu: "2", memory: "4Gi" }
+    limits: { cpu: "8", memory: "16Gi" }
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  env:
+    - name: KAFKA_BOOTSTRAP_SERVERS
+      value: "doggy-kafka-brokers.doggy-mq:9092"
+    - name: REDIS_NODES
+      value: "redis-0.doggy-data:6379,redis-1.doggy-data:6379,redis-2.doggy-data:6379"
+    - name: DB_WRITE_URL
+      valueFrom:
+        secretKeyRef:
+          name: doggy-db-credentials
+          key: write_url
+    - name: NIM_CONTENT_SAFETY_URL
+      value: "http://nim-content-safety.nim-services:8000"
+    - name: NIM_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: nim-credentials
+          key: api_key
+
+kafka:
+  enabled: true
+  brokers: 3
+  storage: { size: "500Gi", class: "ssd" }
+  resources:
+    requests: { cpu: "4", memory: "16Gi" }
+    limits: { cpu: "8", memory: "32Gi" }
+
+redis:
+  enabled: true
+  nodes: 3
+  storage: { size: "50Gi" }
+
+postgres:
+  enabled: true
+  instances: 3
+  storage: { size: "1Ti", class: "ssd" }
+  resources:
+    requests: { cpu: "4", memory: "16Gi" }
+    limits: { cpu: "8", memory: "32Gi" }
+
+prometheusRules:
+  - alert: HighBlockRate
+    expr: rate(doggy_rails_blocked_total[5m]) / rate(doggy_requests_total[5m]) > 0.2
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "拦截率异常升高 (>20%)"
+  - alert: HighLatency
+    expr: histogram_quantile(0.95, rate(doggy_request_duration_seconds_bucket[5m])) > 0.5
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "P95 延迟超过 500ms"
+  - alert: NIMUnavailable
+    expr: up{job="nim-content-safety"} == 0
+    for: 2m
+    labels: { severity: critical }
+    annotations:
+      summary: "NIM 内容安全模型不可用"

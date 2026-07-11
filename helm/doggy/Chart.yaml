@@ -1,0 +1,6 @@
+apiVersion: v2
+name: doggy
+description: AIG-Doggy — 企业级 LLM 安全护栏
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

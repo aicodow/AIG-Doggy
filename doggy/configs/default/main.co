@@ -1,0 +1,12 @@
+import core
+import guardrails
+import nemoguardrails.library
+
+flow main
+  """Doggy 主对话入口 —— 激活护栏 → 用户输入 → LLM 响应。"""
+
+  activate input rails
+  user said $input_text
+  activate output rails
+  $response = await generate llm response
+  bot say $response

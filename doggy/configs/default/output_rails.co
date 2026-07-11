@@ -1,0 +1,21 @@
+import guardrails
+import nemoguardrails.library
+
+flow content safety check output $model="content_safety"
+  """检测 LLM 输出中的不安全内容。"""
+  $result = await call nim content safety model
+    $user_message=$user_message
+    $bot_message=$bot_message
+    $model=$model
+
+  if $result.is_unsafe
+    $bot_message = "抱歉，我无法生成此内容。请换一个话题。"
+
+flow sensitive data detection output
+  """对 LLM 输出中的敏感信息进行脱敏。"""
+  $result = await call presidio pii detect
+    $text=$bot_message
+    $entities=["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "CREDIT_CARD", "US_SSN", "CN_ID_CARD"]
+
+  if $result.has_pii
+    $bot_message = $result.sanitized_text

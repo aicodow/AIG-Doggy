@@ -1,0 +1,57 @@
+colang_version: "2.x"
+
+models:
+  - type: main
+    engine: openai
+    model: gpt-4o-mini
+    api_key_env_var: DOGGY_OPENAI_API_KEY
+
+  - type: content_safety
+    engine: nim
+    model: nvidia/nemoguard-content-safety
+    parameters:
+      base_url: "${NIM_CONTENT_SAFETY_URL}"
+      api_key: "${NIM_API_KEY}"
+
+rails:
+  input:
+    parallel: true
+    flows:
+      - "content safety check input $model=content_safety"
+      - "sensitive data detection input"
+
+  output:
+    flows:
+      - "content safety check output $model=content_safety"
+      - "sensitive data detection output"
+    streaming:
+      enabled: true
+      chunk_size: 200
+      context_size: 50
+      stream_first: true
+
+  config:
+    sensitive_data_detection:
+      input:
+        entities:
+          - PERSON
+          - EMAIL_ADDRESS
+          - PHONE_NUMBER
+          - CREDIT_CARD
+          - US_SSN
+          - CN_ID_CARD
+        score_threshold: 0.3
+      output:
+        entities:
+          - PERSON
+          - EMAIL_ADDRESS
+          - PHONE_NUMBER
+          - CREDIT_CARD
+        score_threshold: 0.3
+
+tracing:
+  enabled: true
+  adapters:
+    - name: OpenTelemetry
+  span_format: opentelemetry
+  enable_content_capture: false

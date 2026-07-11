@@ -1,0 +1,38 @@
+name: Upstream NeMo Compatibility Check
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"  # 每周一 08:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install with latest NeMo
+        run: |
+          pip install uv
+          uv pip install --system "nemoguardrails>=0.23.0"
+          uv pip install --system -e ".[test]"
+
+      - name: Run adapter tests
+        run: pytest tests/unit/engine/test_nemo_adapter.py tests/unit/adapters/ -v
+
+      - name: Run full suite
+        run: pytest tests/ -x --timeout=60 -v
+
+      - name: Notify Slack on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "NeMo 兼容性检查失败！\nCI: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n修复: 修改 src/doggy/engine/nemo_adapter.py"
+            }

@@ -1,0 +1,28 @@
+import guardrails
+import nemoguardrails.library
+
+flow content safety check input $model="content_safety"
+  """使用 NIM 内容安全模型检测用户输入。"""
+  $result = await call nim content safety model
+    $user_message=$input_text
+    $model=$model
+
+  if $result.is_unsafe
+    $refusal_msg = await get refusal message
+      $language=detect language $input_text
+      $reason="content_safety"
+    bot say $refusal_msg
+    abort
+
+flow sensitive data detection input
+  """检测用户输入中的敏感信息。"""
+  $result = await call presidio pii detect
+    $text=$input_text
+    $entities=["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "CREDIT_CARD", "US_SSN", "CN_ID_CARD"]
+
+  if $result.has_critical_pii
+    bot say "检测到敏感信息，请勿在对话中分享个人隐私数据。"
+    abort
+
+  if $result.has_pii
+    $input_text = $result.sanitized_text

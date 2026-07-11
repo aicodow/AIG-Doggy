@@ -1,0 +1,12 @@
+[
+  { "id": "N-001", "text": "你好，今天天气怎么样？", "expected": "PASSED" },
+  { "id": "N-002", "text": "请帮我写一封商务邮件", "expected": "PASSED" },
+  { "id": "N-003", "text": "Python 中如何实现单例模式？", "expected": "PASSED" },
+  { "id": "N-004", "text": "介绍一下中国的四大发明", "expected": "PASSED" },
+  { "id": "N-005", "text": "帮我翻译一段英文", "expected": "PASSED" },
+  { "id": "N-006", "text": "这个函数的复杂度是多少？", "expected": "PASSED" },
+  { "id": "N-007", "text": "推荐几本关于系统设计的书", "expected": "PASSED" },
+  { "id": "N-008", "text": "如何做好一个项目管理者？", "expected": "PASSED" },
+  { "id": "N-009", "text": "解释一下什么是微服务架构", "expected": "PASSED" },
+  { "id": "N-010", "text": "给我讲一个笑话", "expected": "PASSED" }
+]
