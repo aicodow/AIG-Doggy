@@ -22,7 +22,7 @@ def get(plugin_id: str) -> GuardrailPlugin:
 def list_all(stage: str | None = None) -> list[dict[str, str]]:
     """列出所有已注册的护栏插件。"""
     result = []
-    for pid, cls in _registry.items():
+    for _pid, cls in _registry.items():
         inst = cls()
         if stage is None or inst.stage == stage:
             result.append(inst.get_metadata())

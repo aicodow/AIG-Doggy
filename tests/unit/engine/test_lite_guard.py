@@ -1,6 +1,8 @@
-import pytest
 from unittest.mock import AsyncMock, MagicMock
-from doggy.engine.lite_guard import LiteGuardPlugin, _parse_response, TASK_MAP
+
+import pytest
+
+from doggy.engine.lite_guard import TASK_MAP, LiteGuardPlugin, _parse_response
 
 
 class TestParseResponse:

@@ -1,8 +1,9 @@
 """pytest 配置 —— 共享 fixtures 和全局设置。"""
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 将 src 目录加入 Python 路径
 src_path = Path(__file__).parent.parent

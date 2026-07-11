@@ -9,7 +9,12 @@ class TopicControlPlugin(GuardrailPlugin):
     stage = "input"
     maturity = "production"
 
-    def __init__(self, nim_client=None, allowed_topics: list[str] | None = None, blocked_topics: list[str] | None = None):
+    def __init__(
+        self,
+        nim_client=None,
+        allowed_topics: list[str] | None = None,
+        blocked_topics: list[str] | None = None,
+    ):
         self._nim = nim_client
         self._allowed = allowed_topics or []
         self._blocked = blocked_topics or []
@@ -20,6 +25,10 @@ class TopicControlPlugin(GuardrailPlugin):
         try:
             result = await self._nim.check(content, "topic_control")
             is_safe = result.get("is_safe", True)
-            return GuardrailResult(is_safe=is_safe, reason=result.get("reason", ""), confidence=result.get("confidence", 0.0))
+            return GuardrailResult(
+                is_safe=is_safe,
+                reason=result.get("reason", ""),
+                confidence=result.get("confidence", 0.0),
+            )
         except Exception as e:
             return GuardrailResult(is_safe=False, reason=f"nim_error: {e}", confidence=0.0)

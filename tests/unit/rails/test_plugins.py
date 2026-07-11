@@ -1,11 +1,9 @@
 """护栏插件单元测试。"""
 
-import pytest
 from doggy.rails.input.content_safety import ContentSafetyInputPlugin
-from doggy.rails.input.topic_control import TopicControlPlugin
+from doggy.rails.input.injection import ContextBloatPlugin, InjectionDetectionPlugin
 from doggy.rails.input.jailbreak import JailbreakHeuristicsPlugin, _shannon_entropy
 from doggy.rails.input.pii_detection import PIIDetectionPlugin
-from doggy.rails.input.injection import InjectionDetectionPlugin, ContextBloatPlugin
 from doggy.rails.plugins.regex_detection import RegexDetectionPlugin
 
 

@@ -2,8 +2,8 @@
 
 import logging
 import os
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -56,8 +56,8 @@ app.add_middleware(
 
 def setup_app() -> None:
     """注册所有路由和中间件。在 uvicorn 启动前调用。"""
-    from doggy.server.api import router as api_router
     from doggy.server.admin_api import router as admin_router
+    from doggy.server.api import router as api_router
 
     app.include_router(api_router)
     app.include_router(admin_router)

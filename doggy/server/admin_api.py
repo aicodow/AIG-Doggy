@@ -1,11 +1,9 @@
 """管理 API 路由 —— 策略管理、审计日志、应用管理、用户管理。"""
 
 import logging
-from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, Query, Request
 
-from doggy.auth.middleware import authenticate
 from doggy.rails.plugins import list_all as list_plugins
 
 log = logging.getLogger(__name__)
@@ -26,10 +24,10 @@ async def get_policy(name: str):
 
 @router.get("/audit-logs")
 async def audit_logs(
-    app_id: Optional[str] = Query(None),
-    result: Optional[str] = Query(None),
-    start_time: Optional[str] = Query(None),
-    end_time: Optional[str] = Query(None),
+    app_id: str | None = Query(None),
+    result: str | None = Query(None),
+    start_time: str | None = Query(None),
+    end_time: str | None = Query(None),
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
 ):
@@ -82,7 +80,7 @@ async def revoke_api_key(app_id: str, key_id: str):
 
 
 @router.get("/plugins")
-async def get_plugins(stage: Optional[str] = Query(None)):
+async def get_plugins(stage: str | None = Query(None)):
     """列出所有已注册的护栏插件。"""
     return {"plugins": list_plugins(stage)}
 

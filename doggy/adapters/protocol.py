@@ -50,15 +50,29 @@ class OpenAIAdapter(ProtocolAdapter):
 
     def to_external(self, response: Any) -> dict:
         if hasattr(response, "response"):
-            content = response.response if isinstance(response.response, str) else response.response[-1].get("content", "")
+            content = (
+                response.response
+                if isinstance(response.response, str)
+                else response.response[-1].get("content", "")
+            )
             return {
                 "id": f"doggy-{_short_id()}",
                 "object": "chat.completion",
                 "model": getattr(response, "model", "doggy-guard"),
-                "choices": [{"index": 0, "message": {"role": "assistant", "content": content}, "finish_reason": "stop"}],
+                "choices": [
+                    {
+                        "index": 0,
+                        "message": {"role": "assistant", "content": content},
+                        "finish_reason": "stop",
+                    }
+                ],
             }
         if isinstance(response, dict):
-            return {"id": f"doggy-{_short_id()}", "object": "chat.completion", "choices": [{"index": 0, "message": response, "finish_reason": "stop"}]}
+            return {
+                "id": f"doggy-{_short_id()}",
+                "object": "chat.completion",
+                "choices": [{"index": 0, "message": response, "finish_reason": "stop"}],
+            }
         return {"content": str(response)}
 
 

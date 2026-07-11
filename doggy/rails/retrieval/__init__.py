@@ -17,7 +17,11 @@ class RetrievalContentSafetyPlugin(GuardrailPlugin):
             return GuardrailResult(is_safe=True, reason="nim_unavailable", confidence=0.0)
         try:
             result = await self._nim.check(content, "content_safety")
-            return GuardrailResult(is_safe=result.get("is_safe", True), reason=result.get("reason", ""), confidence=result.get("confidence", 0.0))
+            return GuardrailResult(
+                is_safe=result.get("is_safe", True),
+                reason=result.get("reason", ""),
+                confidence=result.get("confidence", 0.0),
+            )
         except Exception as e:
             return GuardrailResult(is_safe=False, reason=f"nim_error: {e}", confidence=0.0)
 

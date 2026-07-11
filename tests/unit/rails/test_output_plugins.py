@@ -1,10 +1,10 @@
 """幻觉检测、事实核查、HF 分类器 —— 单元测试。"""
 
-import pytest
 from unittest.mock import AsyncMock, MagicMock
-from doggy.rails.output.hallucination import HallucinationDetectionPlugin, SelfCheckFactsPlugin
+
 from doggy.rails.output.factchecking import AlignScoreFactCheckPlugin
-from doggy.rails.output.hf_classifier import HFClassifierInputPlugin, HFClassifierOutputPlugin
+from doggy.rails.output.hallucination import HallucinationDetectionPlugin, SelfCheckFactsPlugin
+from doggy.rails.output.hf_classifier import HFClassifierInputPlugin
 
 
 class TestHallucinationPlugin:

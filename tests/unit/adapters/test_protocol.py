@@ -1,5 +1,6 @@
 import pytest
-from doggy.adapters.protocol import OpenAIAdapter, AnthropicAdapter, get_adapter
+
+from doggy.adapters.protocol import AnthropicAdapter, OpenAIAdapter, get_adapter
 from doggy.exceptions import ProtocolNotSupportedError
 
 

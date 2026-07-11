@@ -1,11 +1,10 @@
 """FastAPI 认证中间件 —— 从请求中提取 API Key 并验证。"""
 
 import logging
-from typing import Optional
 
 from fastapi import HTTPException, Request
 
-from doggy.auth.api_key import AppContext, verify_api_key
+from doggy.auth.api_key import AppContext
 
 log = logging.getLogger(__name__)
 
@@ -64,7 +63,7 @@ async def authenticate(request: Request, redis_cache=None, db_pool=None) -> AppC
 
     # 2. 从 PostgreSQL 查询
     if db_pool:
-        from doggy.auth.api_key import _hash, verify_api_key
+        from doggy.auth.api_key import _hash
         key_hash = _hash(raw_key)
         row = await db_pool.fetch_one(
             "SELECT app_id, app_name, policy_name, rate_limit_qps, allowed_models "

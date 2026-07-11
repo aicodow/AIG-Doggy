@@ -88,7 +88,11 @@ class HFClassifierPlugin(GuardrailPlugin):
         blocked_labels = set(config.get("blocked_labels", []))
         threshold = config.get("threshold", 0.5)
 
-        triggered = [(r["label"], r["score"]) for r in results if r["label"] in blocked_labels and r["score"] >= threshold]
+        triggered = [
+            (r["label"], r["score"])
+            for r in results
+            if r["label"] in blocked_labels and r["score"] >= threshold
+        ]
 
         if triggered:
             return GuardrailResult(

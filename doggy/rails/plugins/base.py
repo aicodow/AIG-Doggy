@@ -1,7 +1,7 @@
 """护栏插件基类 —— 所有自定义护栏必须实现此接口。"""
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 

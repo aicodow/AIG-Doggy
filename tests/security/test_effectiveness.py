@@ -1,18 +1,18 @@
 """安全有效性测试 —— 验证各护栏的检出率和误报率。"""
 
 import json
-import pytest
 from pathlib import Path
 
-from doggy.rails.input.pii_detection import PIIDetectionPlugin
+import pytest
+
 from doggy.rails.input.injection import InjectionDetectionPlugin
-from doggy.rails.plugins.regex_detection import RegexDetectionPlugin
+from doggy.rails.input.pii_detection import PIIDetectionPlugin
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
 def load_json(name: str) -> list[dict]:
-    with open(FIXTURES / name, "r", encoding="utf-8") as f:
+    with open(FIXTURES / name, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -30,8 +30,7 @@ class TestPIIDetectionEffectiveness:
         result = await plugin.check(sample["text"])
         if sample["expected"] == "BLOCKED":
             assert result.is_safe is False, f"漏报: {sample['id']} - {sample['text'][:50]}"
-        elif sample["expected"] == "MASKED":
-            if result.is_safe is True and result.sanitized_content:
+        elif sample["expected"] == "MASKED" and result.is_safe is True and result.sanitized_content:
                 assert "[已脱敏]" in result.sanitized_content
 
     @pytest.mark.parametrize("sample", load_json("normal_samples.json"))

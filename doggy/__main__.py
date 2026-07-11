@@ -1,6 +1,7 @@
 """AIG-Doggy CLI 入口点。"""
 
 import uvicorn
+
 from doggy.server.bootstrap import app, setup_app
 
 

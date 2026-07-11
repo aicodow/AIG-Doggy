@@ -1,7 +1,7 @@
 """PostgreSQL 读写分离连接池。"""
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 import asyncpg
 
@@ -19,8 +19,8 @@ class DatabasePool:
     def __init__(self, write_url: str, read_url: str):
         self._write_url = write_url
         self._read_url = read_url
-        self._write_pool: Optional[asyncpg.Pool] = None
-        self._read_pool: Optional[asyncpg.Pool] = None
+        self._write_pool: asyncpg.Pool | None = None
+        self._read_pool: asyncpg.Pool | None = None
 
     async def start(self) -> None:
         self._write_pool = await asyncpg.create_pool(self._write_url, min_size=5, max_size=20)
@@ -43,7 +43,7 @@ class DatabasePool:
         async with self._read_pool.acquire() as conn:
             return await conn.fetch(query, *args)
 
-    async def fetch_one(self, query: str, *args: Any) -> Optional[asyncpg.Record]:
+    async def fetch_one(self, query: str, *args: Any) -> asyncpg.Record | None:
         """查询单条记录。"""
         async with self._read_pool.acquire() as conn:
             return await conn.fetchrow(query, *args)

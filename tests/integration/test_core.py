@@ -1,6 +1,5 @@
 """集成测试 —— 验证核心模块的协作。"""
 
-import pytest
 from unittest.mock import AsyncMock, MagicMock
 
 
@@ -8,8 +7,9 @@ class TestNeMoAdapterIntegration:
     """NeMoAdapter 集成测试（使用 Mock NeMo 实例）。"""
 
     async def test_generate_with_mock_engine(self):
-        from doggy.engine.nemo_adapter import NeMoAdapter
         from nemoguardrails import RailsConfig
+
+        from doggy.engine.nemo_adapter import NeMoAdapter
 
         config = RailsConfig.from_content(
             yaml_content="""
@@ -55,7 +55,7 @@ class TestPluginRegistry:
     """插件注册中心集成测试。"""
 
     def test_register_and_list_plugins(self):
-        from doggy.rails.plugins import register, list_all
+        from doggy.rails.plugins import list_all, register
         from doggy.rails.plugins.base import GuardrailPlugin, GuardrailResult
 
         @register

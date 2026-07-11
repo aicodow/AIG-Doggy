@@ -1,4 +1,3 @@
-import pytest
 from doggy.auth.api_key import generate_api_key, verify_api_key
 
 

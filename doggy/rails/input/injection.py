@@ -40,8 +40,8 @@ class ContextBloatPlugin(GuardrailPlugin):
             return GuardrailResult(is_safe=False, reason="输入过长", confidence=1.0)
         if len(content) < 50:
             return GuardrailResult(is_safe=True, confidence=1.0)
-        from collections import Counter
         import math
+        from collections import Counter
         counts = Counter(content)
         length = len(content)
         entropy = -sum((c / length) * math.log2(c / length) for c in counts.values())

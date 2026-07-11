@@ -1,6 +1,5 @@
 """Kafka 审计事件生产者 —— 异步发送，不阻塞主请求链路。"""
 
-import asyncio
 import json
 import logging
 from typing import Any

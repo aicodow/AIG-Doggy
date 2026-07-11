@@ -2,7 +2,7 @@
 
 import json
 import logging
-from typing import Any, Optional
+from datetime import UTC
 
 import redis.asyncio as aioredis
 
@@ -24,7 +24,7 @@ class RedisCacheManager:
     TTL_POLICY = 600       # 策略配置: 10 分钟
 
     def __init__(self, startup_nodes: list[dict]):
-        self._client: Optional[aioredis.RedisCluster] = None
+        self._client: aioredis.RedisCluster | None = None
         self._startup_nodes = startup_nodes
 
     async def start(self) -> None:
@@ -56,7 +56,7 @@ class RedisCacheManager:
         })
         await self.client.setex(f"apikey:{key_hash}", self.TTL_APP_CTX, data)
 
-    async def get_app_context(self, key_hash: str) -> Optional[AppContext]:
+    async def get_app_context(self, key_hash: str) -> AppContext | None:
         data = await self.client.get(f"apikey:{key_hash}")
         if not data:
             return None
@@ -78,5 +78,5 @@ class RedisCacheManager:
 
 
 def _current_minute() -> str:
-    from datetime import datetime, timezone
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
+    from datetime import datetime
+    return datetime.now(UTC).strftime("%Y%m%d%H%M")

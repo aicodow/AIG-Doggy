@@ -1,6 +1,7 @@
 """PII 检测护栏（DG-IN-PII-001）—— 身份证/电话/邮箱/银行卡。"""
 
 import re
+
 from doggy.rails.plugins.base import GuardrailPlugin, GuardrailResult
 
 CRITICAL_PATTERNS = [
@@ -27,10 +28,15 @@ class PIIDetectionPlugin(GuardrailPlugin):
         # 高危检测
         for pattern, desc in CRITICAL_PATTERNS:
             if pattern.search(content):
-                return GuardrailResult(is_safe=False, reason=f"检测到{desc}", confidence=1.0, metadata={"entity": desc, "level": "critical"})
+                return GuardrailResult(
+                    is_safe=False,
+                    reason=f"检测到{desc}",
+                    confidence=1.0,
+                    metadata={"entity": desc, "level": "critical"},
+                )
         # 警告检测
         sanitized = content
-        for pattern, desc in WARNING_PATTERNS:
+        for pattern, _desc in WARNING_PATTERNS:
             if pattern.search(content):
                 sanitized = pattern.sub("[已脱敏]", sanitized)
         if sanitized != content:
@@ -46,7 +52,7 @@ class PIIOutputPlugin(GuardrailPlugin):
 
     async def check(self, content: str, context: dict | None = None) -> GuardrailResult:
         sanitized = content
-        for pattern, desc in WARNING_PATTERNS:
+        for pattern, _desc in WARNING_PATTERNS:
             sanitized = pattern.sub("[已脱敏]", sanitized)
         if sanitized != content:
             return GuardrailResult(is_safe=True, reason="敏感信息已脱敏", sanitized_content=sanitized, confidence=0.95)

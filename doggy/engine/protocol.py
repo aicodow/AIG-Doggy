@@ -4,7 +4,8 @@
 不导入 nemoguardrails。上游变更仅影响 NeMoAdapter 一个文件。
 """
 
-from typing import Any, AsyncIterator, Protocol, runtime_checkable
+from collections.abc import AsyncIterator
+from typing import Any, Protocol, runtime_checkable
 
 
 @runtime_checkable
