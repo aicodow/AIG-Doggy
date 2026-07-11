@@ -5,8 +5,8 @@ Thank you for your interest in contributing to AIG-Doggy!
 ## Development Setup
 
 ```bash
-git clone https://github.com/your-org/doggy.git
-cd doggy/src
+git clone https://github.com/aicodow/AIG-Doggy.git
+cd AIG-Doggy/src
 uv sync --group dev
 docker compose -f docker-compose.dev.yml up -d
 psql -h localhost -U doggy -d doggy -f scripts/init_db.sql

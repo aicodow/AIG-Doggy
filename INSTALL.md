@@ -58,8 +58,8 @@
 ### 2.1 克隆项目
 
 ```bash
-git clone https://github.com/your-org/doggy.git
-cd doggy/src
+git clone https://github.com/aicodow/AIG-Doggy.git
+cd AIG-Doggy/src
 ```
 
 ### 2.2 安装 Python 依赖
