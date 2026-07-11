@@ -43,10 +43,10 @@ jobs:
         run: uv sync --group dev
 
       - name: Lint
-        run: uv run ruff check src/
+        run: uv run ruff check .
 
       - name: Type check
-        run: uv run ty src/doggy --config-file pyproject.toml || true
+        run: uv run ty doggy --config-file pyproject.toml || true
 
       - name: Test
         run: uv run pytest tests/ --cov=doggy --cov-report=term-missing --cov-report=xml -v
