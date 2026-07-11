@@ -54,8 +54,16 @@ app.add_middleware(
 )
 
 
+_setup_done = False
+
+
 def setup_app() -> None:
-    """注册所有路由和中间件。在 uvicorn 启动前调用。"""
+    """注册所有路由和中间件。在 uvicorn 启动前调用。幂等。"""
+    global _setup_done
+    if _setup_done:
+        return
+    _setup_done = True
+
     from doggy.server.admin_api import router as admin_router
     from doggy.server.api import router as api_router
 

@@ -25,7 +25,9 @@ class TestNeMoAdapterIntegration:
 
         adapter = NeMoAdapter(config=config)
         adapter._engine = MagicMock()
-        adapter._engine.generate_async = AsyncMock(return_value="mock response")
+        mock_response = MagicMock()
+        mock_response.response = [{"role": "assistant", "content": "Hello!"}]
+        adapter._engine.generate_async = AsyncMock(return_value=mock_response)
         adapter._engine.startup = AsyncMock()
         adapter._engine.shutdown = AsyncMock()
 
